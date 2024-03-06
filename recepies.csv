@@ -1,1 +1,6 @@
-Input_1;Input_2;Activated;Item
+Input_1;Input_2;Aktiviert;Item;Position;Bewegt;Gemalt
+none;none;1;feuer;(100, 100);0;1
+none;none;1;wasser;(150.0, 100);0;1
+none;none;1;luft;(200, 100);0;1
+none;none;1;erde;(250.0,100);0;1
+luft;wasser;0;wolken;(100,100);0;0
