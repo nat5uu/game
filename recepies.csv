@@ -1,5 +1,5 @@
-Input_1;Input_2;Aktiviert;Item;Position;Bewegt;Gemalt
-none;none;1;feuer;(100, 100);0;1
+Input_1;Input_2;Aktiviert;Item;Position;Bewegt;Gemalt;Bilder
+none;none;1;feuer;(100, 100);0;1;"./bilder
 none;none;1;wasser;(150.0, 100);0;1
 none;none;1;luft;(200, 100);0;1
 none;none;1;erde;(250.0,100);0;1

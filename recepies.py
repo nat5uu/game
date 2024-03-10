@@ -1,6 +1,7 @@
 import pandas as pd
 import pygame
 
+
 #Dataframe
 df = pd.read_csv("./recepies.csv", header = 'infer', sep =";")
 
@@ -10,6 +11,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 hitbox = 20
+item_wird_bewegt = False
 
 # neue_zeile = {"Input_1": "none","Input_2": "none","Aktiviert":1,"Item":"luft","Position":(screen.get_width() / 4, screen.get_height() / 4),"Bewegt":False,"Gemalt":1}
 # df.loc[len(df)] = neue_zeile
@@ -17,6 +19,8 @@ hitbox = 20
 
 def distanz(point1,point2):
      return ((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2) ** 0.5
+
+  
 
 class Object():
     def __init__(self,input_1,input_2,aktiviert,item,position,bewegt,gemalt) -> None:
@@ -58,12 +62,15 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             for item in objects:
-                if distanz(item.position, event.pos) <= hitbox:
+                if distanz(item.position, event.pos) <= hitbox and not item_wird_bewegt:
                     item.bewegt = 1
+                    item_wird_bewegt = True
+
                     
         elif event.type == pygame.MOUSEBUTTONUP:
             for item in objects:
                 item.bewegt = 0
+                item_wird_bewegt = False
     
         elif event.type == pygame.MOUSEMOTION:
             for item in objects:
@@ -78,16 +85,18 @@ while running:
                         if distanz(item1.position, item2.position) <= hitbox and not item1.bewegt and not item2.bewegt:
                             for item in objects:
                                 if (item.input_1 == item1.item and item.input_2 == item2.item) or (item.input_2 == item1.item and item.input_1 == item2.item):
-                                    item.activiert = 1
+                                    item.aktiviert = 1
                                     item.gemalt = 1
                                     item.position = item1.position
                                     objects.remove(item1)
-                                    objects.remove(item2)                       
+                                    objects.remove(item2)
+                                item.info()                       
 
         
     keys = pygame.key.get_pressed()
     if keys[pygame.K_c] and keys[pygame.K_LCTRL]:
         running = False
+
 
     
 
@@ -97,7 +106,6 @@ while running:
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
-
 pygame.quit()
 
 
