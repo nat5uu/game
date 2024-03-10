@@ -23,7 +23,7 @@ def distanz(point1,point2):
   
 
 class Object():
-    def __init__(self,input_1,input_2,aktiviert,item,position,bewegt,gemalt) -> None:
+    def __init__(self,input_1,input_2,aktiviert,item,position,bewegt,gemalt,bilder) -> None:
         self.input_1 = input_1
         self.input_2 = input_2
         self.aktiviert = aktiviert
@@ -31,30 +31,34 @@ class Object():
         self.position = eval(position)
         self.bewegt = bewegt
         self.gemalt = gemalt
+        self.bild = pygame.image.load(f"{bilder}")
+        self.bild = pygame.transform.scale(self.bild, (hitbox*2,hitbox*2))
+        
+
+    def draw(self,screen):
+        self.hitbox = pygame.draw.circle(screen, "white", pygame.Vector2(self.position), hitbox)
+        screen.blit(self.bild, self.hitbox)
     def info(self):
         return print(f"{self.input_1},{self.input_2},{self.aktiviert},{self.item},{self.position},{self.bewegt},{self.gemalt}")
 
 objects = []
 for i in range(0,len(df)):
-    objects.append(Object(df.at[i,"Input_1"],df.at[i,"Input_2"],df.at[i,"Aktiviert"],df.at[i,"Item"],df.at[i,"Position"],df.at[i,"Bewegt"],df.at[i,"Gemalt"],))
+    objects.append(Object(df.at[i,"Input_1"],df.at[i,"Input_2"],df.at[i,"Aktiviert"],df.at[i,"Item"],df.at[i,"Position"],df.at[i,"Bewegt"],df.at[i,"Gemalt"],df.at[i,"Bilder"]))
 print("check1")
 for obj in objects:
     obj.info()
-while running:
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
 
+def zeichnen():
+    # fill the screen with a color to wipe away anything from last frame
+    screen.fill("black")
     for item in objects:
-        if item.gemalt and item.item == "feuer":
-            pygame.draw.circle(screen, "red", pygame.Vector2(item.position), hitbox)
-        elif item.gemalt and item.item == "wasser":
-            pygame.draw.circle(screen, "blue", pygame.Vector2(item.position), hitbox)
-        elif item.gemalt and item.item == "luft":
-            pygame.draw.circle(screen, "white", pygame.Vector2(item.position), hitbox)
-        elif item.gemalt and item.item == "erde":
-            pygame.draw.circle(screen, "brown", pygame.Vector2(item.position), hitbox)
-        elif item.gemalt:
-            pygame.draw.circle(screen, "yellow", pygame.Vector2(item.position), hitbox)
+        if item.gemalt:
+            item.draw(screen)
+
+while running:
+    zeichnen()
+    
+        
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -90,7 +94,7 @@ while running:
                                     item.position = item1.position
                                     objects.remove(item1)
                                     objects.remove(item2)
-                                item.info()                       
+                                #item.info()                       
 
         
     keys = pygame.key.get_pressed()
